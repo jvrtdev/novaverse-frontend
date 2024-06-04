@@ -7,8 +7,7 @@ export default function Header(){
     <nav className="w-full sticky z-50 top-0 inset-x-0 h-16 bg-black flex items-center">
       <MaxWidthWrapper>
         <div className="flex justify-end gap-3 text-white items-center text-3xl">
-          <FaRegUserCircle />
-          <Cart />
+          <FaRegUserCircle /> <Cart />
         </div>
       </MaxWidthWrapper>
     </nav>
