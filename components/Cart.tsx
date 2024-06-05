@@ -11,7 +11,6 @@ import { useCart } from "@/context/CartContext";
 
 
 export default function Cart() {
-  const { cart } = useCart()
 
   return( 
     <Popover>
@@ -21,7 +20,7 @@ export default function Cart() {
         <h1 className="font-medium text-center text-xl">Meu carrinho</h1>
         <Separator />
 
-        <Product product={cart} />    
+         
         
       </PopoverContent>
     </Popover>
