@@ -1,6 +1,6 @@
 'use client'
 import { createContext, useState, useContext, useEffect, ReactNode } from 'react';
-import axios from 'axios';
+import api from '@/services/api';
 
 interface CartItem {
   id: number;
@@ -28,7 +28,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const fetchCart = async () => {
     try {
-      const response = await axios.get('/api/cart');
+      const response = await api.get('/api/cart');
       setCart(response.data);
     } catch (error) {
       console.error('Error fetching cart:', error);
@@ -37,7 +37,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const addToCart = async (productId: number) => {
     try {
-      const response = await axios.post('/api/cart', { productId });
+      const response = await api.post('/api/cart', { productId });
       setCart(response.data);
     } catch (error) {
       console.error('Error adding to cart:', error);
@@ -46,7 +46,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const removeFromCart = async (productId: number) => {
     try {
-      const response = await axios.delete(`/api/cart/${productId}`);
+      const response = await api.delete(`/api/cart/${productId}`);
       setCart(response.data);
     } catch (error) {
       console.error('Error removing from cart:', error);
@@ -55,7 +55,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const clearCart = async () => {
     try {
-      await axios.post('/api/cart/clear');
+      await api.post('/api/cart/clear');
       setCart([]);
     } catch (error) {
       console.error('Error clearing cart:', error);
