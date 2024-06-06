@@ -4,7 +4,6 @@ import { MaxWidthWrapper } from "@/components/MaxWidthWrapper";
 import Product from "@/components/Product";
 import { useCart } from "@/context/CartContext";
 import api from "@/services/api";
-import { fetchProducts } from "@/services/get-products";
 import { useEffect, useState } from "react";
 
 
@@ -21,8 +20,9 @@ export default function Home() {
   const fetchProducts = async () => {
     try{
       const response = await api.get('/api/products')
+      console.log(response.data)
       return setProducts(response.data) 
-      
+     
     } catch(error) {
       return error
     }
@@ -33,13 +33,17 @@ export default function Home() {
       <MaxWidthWrapper>
         <div className="flex items-center justify-center">
 
-          <div className="flex gap-4">
-            {loading ? <div>CARREGANDO...</div> : ''}
-            {products.map((product) => (
-              <div>
-                <Product key={product.id} product={product} />
-              </div>
-            ))}  
+          <div className="flex gap-4 flex-wrap w-full items-center">
+          {loading ? <div>CARREGANDO...</div> : ''}
+            {products.length > 0 ? (
+              products.map((product) => (
+                <div key={product.id}>
+                  <Product product={product} />
+                </div>
+              ))
+            ) : (
+              !loading && <div>No products found</div>
+            )}
           </div>
         </div>
       </MaxWidthWrapper>

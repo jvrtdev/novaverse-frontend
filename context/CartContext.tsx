@@ -1,8 +1,11 @@
 'use client'
 import { createContext, useState, useContext, useEffect, ReactNode } from 'react';
 import api from '@/services/api';
+import { toast } from 'sonner';
+import * as Popover from '@radix-ui/react-popover';
 
 interface CartItem {
+  img: string;
   id: number;
   name: string;
   description: string;
@@ -27,26 +30,47 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const fetchCart = async () => {
-    try {
-      const response = await api.get('/api/cart');
-      setCart(response.data);
-    } catch (error) {
-      console.error('Error fetching cart:', error);
+    const id =  localStorage.getItem('id');
+    if(id){
+      try {
+        const response = await api.get(`/api/cart/${id}`);
+        console.log("aquii vem do cartcontext",response.data)
+        setCart(response.data);
+      } catch (error) {
+        console.error('Error fetching cart:', error);
     }
+    
+    toast("Faça login para visualizar o carrinho",
+      {
+        action: {
+          label: "Login",
+          onClick: () => ''
+        }
+      }
+    )
+  }
   };
 
   const addToCart = async (productId: number) => {
-    try {
-      const response = await api.post('/api/cart', { productId });
-      setCart(response.data);
-    } catch (error) {
-      console.error('Error adding to cart:', error);
+    const lsItem: any = localStorage.getItem('id')
+    const id = parseInt(lsItem, 10);
+    if(id){
+      const data = {cart_id: id, product_id: productId, quantity: 1}
+      try {
+        const response = await api.post(`/api/cart/product`, data);
+        setCart(response.data)
+      } catch (error) {
+        console.error('Error adding to cart:', error);
+      }
     }
+    
   };
 
-  const removeFromCart = async (productId: number) => {
+  const removeFromCart = async (productId: any) => {
+    const ls: any = localStorage.getItem("id");
+    const data: any = {cart_id: +ls, product_id: productId}
     try {
-      const response = await api.delete(`/api/cart/${productId}`);
+      const response = await api.delete(`/api/cart/delete/item`, data);
       setCart(response.data);
     } catch (error) {
       console.error('Error removing from cart:', error);
